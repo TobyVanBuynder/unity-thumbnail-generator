@@ -1,0 +1,78 @@
+.content-view {
+    max-width: 320px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    margin-top: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    -unity-text-align: upper-left;
+    background-image: url("project://database/Assets/ThirdParty/Kenney_UIAdventurePack/PNG/panel_blue.png?fileID=2800000&guid=1b2464f3c2a2e194bb773cc489ba19e1&type=3#panel_blue");
+    -unity-slice-bottom: 16;
+    -unity-slice-right: 16;
+    -unity-slice-top: 16;
+    -unity-slice-left: 16;
+}
+
+.open-file-view__title {
+    margin-top: 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    align-items: stretch;
+    -unity-text-align: middle-center;
+    font-size: 21px;
+    background-color: rgba(255, 255, 255, 0);
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+}
+
+.button {
+    background-image: url("project://database/Assets/ThirdParty/Kenney_UIAdventurePack/PNG/buttonLong_brown.png?fileID=2800000&guid=1fa84883b83497846b6ad75f8991837e&type=3#buttonLong_brown");
+    -unity-slice-left: 4;
+    -unity-slice-top: 4;
+    -unity-slice-right: 4;
+    -unity-slice-bottom: 4;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+}
+
+.model-loaded-view__label {
+    margin-top: 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    align-items: stretch;
+    -unity-text-align: middle-center;
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+}
+
+.model-loaded-view__enum .unity-base-field__label {
+    width: auto;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+}
+
+.model-loaded-view__enum {
+    justify-content: center;
+}
