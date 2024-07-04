@@ -10,7 +10,7 @@
                 <ui:Image name="Thumbnail" style="width: 100%; height: 100%;" />
             </ui:VisualElement>
             <ui:Label tabindex="-1" text="FILENAME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FileName" class="model-loaded-view__label" />
-            <ui:EnumField label="Export as" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" name="ExportFileType" class="model-loaded-view__enum" style="align-self: auto; align-items: center;" />
+            <ui:EnumField label="Export as" type="Thumbnail.ExportMode, Assembly-CSharp" name="ExportFileType" class="model-loaded-view__enum" style="align-self: auto; align-items: center;" />
             <ui:Button text="Export" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ExportButton" class="button" />
         </ui:GroupBox>
     </ui:GroupBox>

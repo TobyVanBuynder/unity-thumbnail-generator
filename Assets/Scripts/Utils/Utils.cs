@@ -45,8 +45,4 @@ public static class Utils
         GL.Clear(true, true, Color.clear);
         RenderTexture.active = prevActive;
     }
-    public static float CeilToNearestHalf(float value)
-    {
-        return Mathf.Ceil(value * 2) * 0.5f;
-    }
 }

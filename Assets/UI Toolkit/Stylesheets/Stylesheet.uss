@@ -73,6 +73,17 @@
     color: rgb(255, 255, 255);
 }
 
-.model-loaded-view__enum {
+.model-loaded-view__enum .unity-enum-field__input {
     justify-content: center;
+    background-image: url("project://database/Assets/ThirdParty/Kenney_UIAdventurePack/PNG/panelInset_brown.png?fileID=2800000&guid=2bc9d4ea894c27d4785f77c3b7245f98&type=3#panelInset_brown");
+    -unity-slice-left: 4;
+    -unity-slice-top: 4;
+    -unity-slice-right: 4;
+    -unity-slice-bottom: 4;
+    color: white;
+}
+
+.model-loaded-view__enum .unity-enum-field__arrow {
+    background-image: url("project://database/Assets/ThirdParty/Kenney_UIAdventurePack/PNG/arrowSilver_down.png?fileID=2800000&guid=789534ac7ffcf104bbfb1ed313fb4fb8&type=3#arrowSilver_down");
+    -unity-background-image-tint-color: white;
 }
