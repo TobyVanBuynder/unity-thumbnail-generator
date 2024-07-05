@@ -3,7 +3,8 @@ using UnityEngine;
 public class ThumbnailGenerator : MonoBehaviour
 {
     private readonly int _defaultRTSize = 256;
-    private readonly RenderTextureFormat _rtFormat = RenderTextureFormat.ARGB32;
+    private readonly RenderTextureFormat _defaultRTFormat = RenderTextureFormat.ARGB32;
+    private readonly int _defaultRTDepthBufferBits = 8;
     private readonly Vector3 _thumbnailObjectForward = -Vector3.forward;
 
     [SerializeField] private Camera _camera;
@@ -115,7 +116,7 @@ public class ThumbnailGenerator : MonoBehaviour
 
     private RenderTexture GenerateDefaultRT()
     {
-        RenderTextureDescriptor desc = new RenderTextureDescriptor(_defaultRTSize, _defaultRTSize, _rtFormat);
+        RenderTextureDescriptor desc = new RenderTextureDescriptor(_defaultRTSize, _defaultRTSize, _defaultRTFormat, _defaultRTDepthBufferBits);
         return new RenderTexture(desc);
     }
 

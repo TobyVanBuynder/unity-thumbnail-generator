@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ThumbnailFromModel : MonoBehaviour
@@ -24,7 +25,7 @@ public class ThumbnailFromModel : MonoBehaviour
         GlobalEvents.OnModelLoaded -= OnModelLoaded;
     }
 
-    private void OnModelLoaded(string filePath, GameObject modelObject, Model.Type type)
+    private async void OnModelLoaded(string filePath, GameObject modelObject, Model.Type type)
     {
         if (IsOfTypeGLTF(type))
         {
@@ -37,6 +38,8 @@ public class ThumbnailFromModel : MonoBehaviour
         }
 
         _generatorLoader.Get().GenerateThumbnail(modelObject.transform, _thumbnail);
+
+        await Task.Yield();
 
         GlobalEvents.OnThumbnailLoaded?.Invoke(_thumbnail);
     }
@@ -55,7 +58,7 @@ public class ThumbnailFromModel : MonoBehaviour
 
     private void CreateRenderTexture()
     {
-        RenderTextureDescriptor desc = new RenderTextureDescriptor(256, 256, RenderTextureFormat.ARGB32)
+        RenderTextureDescriptor desc = new RenderTextureDescriptor(256, 256, RenderTextureFormat.ARGB32, 8)
         {
             sRGB = true
         };
