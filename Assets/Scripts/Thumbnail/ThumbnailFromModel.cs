@@ -28,7 +28,7 @@ public class ThumbnailFromModel : MonoBehaviour
     {
         if (IsOfTypeGLTF(type))
         {
-            FixGltfParentTransform(modelObject);
+            FixLoadedGltfTransform(modelObject);
         }
 
         if (_thumbnail == null)
@@ -46,11 +46,11 @@ public class ThumbnailFromModel : MonoBehaviour
         return type == Model.Type.GLTF || type == Model.Type.GLB;
     }
 
-    private void FixGltfParentTransform(GameObject modelObject)
+    private void FixLoadedGltfTransform(GameObject modelObject)
     {
-        Transform parent = modelObject.transform.GetChild(0);
-        parent.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-        parent.localScale = Vector3.one;
+        Transform modelTransform = modelObject.transform.GetChild(0);
+        modelTransform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+        modelTransform.localScale = Vector3.one;
     }
 
     private void CreateRenderTexture()
