@@ -23,7 +23,7 @@ public class ThumbnailUI : MonoBehaviour
     void Awake()
     {
         InitializeVariablesFromRoot(_uiDocument.rootVisualElement);
-        HookIntoEvents();
+        HookButtons();
     }
 
     private void InitializeVariablesFromRoot(VisualElement root)
@@ -39,10 +39,30 @@ public class ThumbnailUI : MonoBehaviour
         _exportButton = root.Q<Button>("ExportButton");
     }
 
-    private void HookIntoEvents()
+    private void HookButtons()
     {
         _selectFileButton.clicked += OnClickSelectFile;
         _exportButton.clicked += OnClickExport;
+    }
+
+    void Start()
+    {
+        SetModelLoadedView(false);
+    }
+
+    void OnEnable()
+    {
+        GlobalEvents.OnModelLoaded += OnModelLoaded;
+    }
+
+    void OnDisable()
+    {
+        GlobalEvents.OnModelLoaded -= OnModelLoaded;
+    }
+
+    private void OnModelLoaded(string fileName, GameObject modelObject, Model.Type modelType)
+    {
+        throw new NotImplementedException();
     }
 
     private void SetModelLoadedView(bool isEnabled)
@@ -59,12 +79,7 @@ public class ThumbnailUI : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        SetModelLoadedView(false);
-    }
-
-    void OnClickSelectFile()
+    private void OnClickSelectFile()
     {
         ExtensionFilter[] fileTypes = new []{
             FileSystem.CreateFileType("GLTF scene", "gltf", "glb")
@@ -72,19 +87,20 @@ public class ThumbnailUI : MonoBehaviour
         FileSystem.OpenPanelAsync("Import GLTF scene", fileTypes, Application.persistentDataPath, OnOpenFilePanelAsync);
     }
 
-    void OnClickExport()
+    private void OnClickExport()
     {
         ExtensionFilter[] fileTypes = new []{
-            FileSystem.CreateFileType("Model file", "model")
+            FileSystem.CreateFileType("Image (PNG)", "png")
         };
         FileSystem.SavePanelAsync("Export model file", "", fileTypes, Application.persistentDataPath, OnSaveFilePanelAsync);
     }
 
-    async void OnOpenFilePanelAsync(string[] fileNames)
+    private async void OnOpenFilePanelAsync(string[] fileNames)
     {
         if (fileNames.Length > 0)
         {
-            string fileToLoad = fileNames[0].Replace("\\", "\\\\");
+            string fileToLoad = fileNames[0];
+            fileToLoad = Utils.FixFilePath(fileToLoad);
             
             ThumbnailGenerator generator = FindObjectOfType<ThumbnailGenerator>();
             (GameObject, GltfAsset) gltfTuple = generator.CreateSetupPrefab();
@@ -98,7 +114,7 @@ public class ThumbnailUI : MonoBehaviour
         }
     }
 
-    async void OnSaveFilePanelAsync(string filePath)
+    private async void OnSaveFilePanelAsync(string filePath)
     {
         if (filePath != null && filePath.Length > 0)
         {

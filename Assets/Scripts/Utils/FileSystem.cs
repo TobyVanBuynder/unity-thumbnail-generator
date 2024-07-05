@@ -1,5 +1,6 @@
 using SFB;
 using System;
+using System.Collections.Generic;
 
 public static class FileSystem
 {
@@ -10,6 +11,27 @@ public static class FileSystem
             return new ExtensionFilter(fileTypeName, extensions);
         }
     }
+
+    public class FileTypeBuilder
+    {
+        List<ExtensionFilter> _fileTypes;
+
+        public FileTypeBuilder()
+        {
+            _fileTypes = new List<ExtensionFilter>();
+        }
+
+        public FileTypeBuilder Add(string fileTypeName, params string[] fileTypes)
+        {
+            _fileTypes.Add(new ExtensionFilter(fileTypeName, fileTypes));
+            return this;
+        }
+
+        public ExtensionFilter[] Build()
+        {
+            return _fileTypes.ToArray();
+        }
+    } 
 
     public static ExtensionFilter CreateFileType(string fileTypeName, params string[] extensions)
     {

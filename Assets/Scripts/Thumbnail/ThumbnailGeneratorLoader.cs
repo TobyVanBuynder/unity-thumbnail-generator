@@ -26,6 +26,6 @@ public class ThumbnailGeneratorLoader : MonoBehaviour
 
     private void CreateThumbnailGenerator()
     {
-        _thumbnailGenerator = Instantiate(_thumbnailGeneratorPrefab, transform).GetComponent<ThumbnailGenerator>();
+        _thumbnailGenerator = Instantiate(_thumbnailGeneratorPrefab).GetComponent<ThumbnailGenerator>();
     }
 }

@@ -45,4 +45,9 @@ public static class Utils
         GL.Clear(true, true, Color.clear);
         RenderTexture.active = prevActive;
     }
+
+    public static string FixFilePath(string filePath)
+    {
+        return filePath.Replace("\\", "\\\\");;
+    }
 }
