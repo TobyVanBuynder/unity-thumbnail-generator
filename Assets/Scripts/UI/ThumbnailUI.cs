@@ -15,6 +15,7 @@ public class ThumbnailUI : MonoBehaviour
     Label _fileNameLabel;
     EnumField _exportFileTypeEnum;
     Button _exportButton;
+    Button _chooseNewFileButton;
 
     void Awake()
     {
@@ -33,12 +34,14 @@ public class ThumbnailUI : MonoBehaviour
         _fileNameLabel = root.Q<Label>("FileName");
         _exportFileTypeEnum = root.Q<EnumField>("ExportFileType");
         _exportButton = root.Q<Button>("ExportButton");
+        _chooseNewFileButton = root.Q<Button>("ChooseNewFileButton");
     }
 
     private void HookButtons()
     {
         _selectFileButton.clicked += OnClickSelectFile;
         _exportButton.clicked += OnClickExport;
+        _chooseNewFileButton.clicked += OnClickChooseNewFile;
     }
 
     private void OnClickSelectFile()
@@ -49,6 +52,11 @@ public class ThumbnailUI : MonoBehaviour
     private void OnClickExport()
     {
         GlobalEvents.OnExportFile?.Invoke(Application.streamingAssetsPath, _thumbnailImage.image, (Thumbnail.ExportMode)_exportFileTypeEnum.value);
+    }
+
+    private void OnClickChooseNewFile()
+    {
+        GlobalEvents.OnSelectFile?.Invoke(Application.streamingAssetsPath);
     }
 
     void Start()

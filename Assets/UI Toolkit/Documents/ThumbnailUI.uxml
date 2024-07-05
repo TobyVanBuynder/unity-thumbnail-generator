@@ -12,6 +12,7 @@
             <ui:Label tabindex="-1" text="FILENAME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FileName" class="model-loaded-view__label" />
             <ui:EnumField label="Export as" type="Thumbnail.ExportMode, Assembly-CSharp" name="ExportFileType" class="model-loaded-view__enum" style="align-self: auto; align-items: center;" />
             <ui:Button text="Export" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ExportButton" class="button" />
+            <ui:Button text="Choose New File" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ChooseNewFileButton" class="button" />
         </ui:GroupBox>
     </ui:GroupBox>
 </ui:UXML>
