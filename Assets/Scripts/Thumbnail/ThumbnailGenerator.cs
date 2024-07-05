@@ -1,63 +1,60 @@
 using UnityEngine;
 using GLTFast;
+using System;
 
 public class ThumbnailGenerator : MonoBehaviour
 {
+    static int _DefaultRTSize = 256;
+
     [SerializeField] Camera _camera;
     [SerializeField] Light _directionalLight;
     [SerializeField] Transform _holder;
 
     Vector3 _thumbnailObjectForward = -Vector3.forward;
     Vector3[] _boundsVertices = null;
-    RenderTexture _cachedRenderTexture = null;
-    int _renderTextureSize = 256;
     int _thumbnailLayerMask;
 
-    public void Awake()
+    void Awake()
     {
         _thumbnailLayerMask = LayerMask.NameToLayer("Thumbnail");
+
+        SetLayerMask();
         Disable();
     }
 
-    public void Enable()
+    private void SetLayerMask()
+    {
+        gameObject.layer = GetThumbnailLayer();
+        _camera.gameObject.layer = GetThumbnailLayer();
+        _directionalLight.gameObject.layer = GetThumbnailLayer();
+        _holder.gameObject.layer = GetThumbnailLayer();
+    }
+
+    private void Enable()
     {
         _camera.enabled = true;
         _directionalLight.enabled = true;
     }
 
-    public void Disable()
+    private void Disable()
     {
         _camera.enabled = false;
         _directionalLight.enabled = false;
     }
 
-    public int GetThumbnailLayer()
+    private int GetThumbnailLayer()
     {
         return _thumbnailLayerMask;
     }
 
-    public (GameObject, GltfAsset) CreateSetupPrefab()
-    {
-        GameObject go = new GameObject();
-        go.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-
-        GltfAsset gltfAsset = go.AddComponent<GltfAsset>();
-        gltfAsset.LoadOnStartup = false;
-        gltfAsset.InstantiationSettings = new InstantiationSettings{
-            Layer = GetThumbnailLayer(),
-            SceneObjectCreation = SceneObjectCreation.Never
-        };
-
-        return (go, gltfAsset);
-    }
-
-    public RenderTexture GenerateThumbnail(Transform objectTransform)
+    public void GenerateThumbnail(Transform objectTransform, RenderTexture renderTexture = null)
     {
         Enable();
 
-        var root = objectTransform.GetChild(0);
+        // TODO: move this to GLTF / GLB model loading
+        /*var root = objectTransform.GetChild(0);
         root.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-        root.localScale = Vector3.one;
+        root.localScale = Vector3.one;*/
 
         Transform oldParent = objectTransform.parent;
         Vector3 oldForward = objectTransform.forward;
@@ -68,50 +65,57 @@ public class ThumbnailGenerator : MonoBehaviour
         SetupCamera();
         Utils.FitObjectInOrthographic(objectTransform, _camera, ref _boundsVertices);
 
-        RenderTexture renderTexture;
-        GenerateRenderTexture(out renderTexture);
+        Generate(renderTexture);
 
         objectTransform.forward = oldForward;
         objectTransform.SetParent(oldParent, false);
 
         Disable();
-
-        return renderTexture;
     }
 
-    void SetupCamera()
+    private void SetupCamera()
     {
         _camera.transform.position = -_camera.transform.forward * 10;
         _camera.aspect = 1;
         _camera.orthographicSize = 1;
     }
 
-    void GenerateRenderTexture(out RenderTexture renderTexture)
+    private void Generate(RenderTexture renderTexture)
     {
-        if (!_cachedRenderTexture)
-            _cachedRenderTexture = new RenderTexture(_renderTextureSize, _renderTextureSize, 0, RenderTextureFormat.ARGB32, 0);
-        
-        if (!_cachedRenderTexture.IsCreated())
+        if (renderTexture == null)
         {
-            _cachedRenderTexture.Create();
-            _cachedRenderTexture.filterMode = FilterMode.Point;
+            renderTexture = GenerateDefaultRT();
         }
-        else
+        else if (!renderTexture.IsCreated())
         {
-            Utils.ClearRenderTexture(_cachedRenderTexture);
+            CreateRT(renderTexture);
         }
 
-        if (_cachedRenderTexture.IsCreated())
+        if (renderTexture.IsCreated())
         {
-            _camera.targetTexture = _cachedRenderTexture;
-            _camera.Render();
-            renderTexture = _cachedRenderTexture;
-            _camera.targetTexture = null;
+            Utils.ClearRenderTexture(renderTexture);
+            RenderOnCamera(renderTexture);
         }
-        else
-        {
-            _cachedRenderTexture = null;
-            renderTexture = null;
-        }
+    }
+
+    private RenderTexture GenerateDefaultRT()
+    {
+        RenderTextureDescriptor desc = new RenderTextureDescriptor(_DefaultRTSize, _DefaultRTSize, RenderTextureFormat.ARGB32, 0);
+        RenderTexture renderTexture = new RenderTexture(desc);
+        CreateRT(renderTexture);
+        return renderTexture;
+    }
+
+    private void CreateRT(RenderTexture renderTexture)
+    {
+        renderTexture.Create();
+        renderTexture.filterMode = FilterMode.Point;
+    }
+
+    private void RenderOnCamera(RenderTexture renderTexture)
+    {
+        _camera.targetTexture = renderTexture;
+        _camera.Render();
+        _camera.targetTexture = null;
     }
 }

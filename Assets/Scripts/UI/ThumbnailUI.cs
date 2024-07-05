@@ -45,24 +45,23 @@ public class ThumbnailUI : MonoBehaviour
         _exportButton.clicked += OnClickExport;
     }
 
+    private void OnClickSelectFile()
+    {
+        GlobalEvents.OnSelectFile?.Invoke(Application.persistentDataPath);
+    }
+
+    private void OnClickExport()
+    {
+        // TODO: move to event call
+        ExtensionFilter[] fileTypes = new []{
+            FileSystem.CreateFileType("Image (PNG)", "png")
+        };
+        FileSystem.SavePanelAsync("Export model file", "", fileTypes, Application.persistentDataPath, OnSaveFilePanelAsync);
+    }
+
     void Start()
     {
         SetModelLoadedView(false);
-    }
-
-    void OnEnable()
-    {
-        GlobalEvents.OnModelLoaded += OnModelLoaded;
-    }
-
-    void OnDisable()
-    {
-        GlobalEvents.OnModelLoaded -= OnModelLoaded;
-    }
-
-    private void OnModelLoaded(string fileName, GameObject modelObject, Model.Type modelType)
-    {
-        throw new NotImplementedException();
     }
 
     private void SetModelLoadedView(bool isEnabled)
@@ -79,20 +78,26 @@ public class ThumbnailUI : MonoBehaviour
         }
     }
 
-    private void OnClickSelectFile()
+    void OnEnable()
     {
-        ExtensionFilter[] fileTypes = new []{
-            FileSystem.CreateFileType("GLTF scene", "gltf", "glb")
-        };
-        FileSystem.OpenPanelAsync("Import GLTF scene", fileTypes, Application.persistentDataPath, OnOpenFilePanelAsync);
+        GlobalEvents.OnModelLoaded += OnModelLoaded;
+        GlobalEvents.OnThumbnailLoaded += OnThumbnailLoaded;
     }
 
-    private void OnClickExport()
+    void OnDisable()
     {
-        ExtensionFilter[] fileTypes = new []{
-            FileSystem.CreateFileType("Image (PNG)", "png")
-        };
-        FileSystem.SavePanelAsync("Export model file", "", fileTypes, Application.persistentDataPath, OnSaveFilePanelAsync);
+        GlobalEvents.OnModelLoaded -= OnModelLoaded;
+        GlobalEvents.OnThumbnailLoaded -= OnThumbnailLoaded;
+    }
+
+    private void OnModelLoaded(string filePath, GameObject _, Model.Type modelType)
+    {
+        _fileNameLabel.text = Path.GetFileName(filePath);
+    }
+
+    private void OnThumbnailLoaded(Texture thumbnail)
+    {
+        _thumbnailImage.image = thumbnail;
     }
 
     private async void OnOpenFilePanelAsync(string[] fileNames)
@@ -101,16 +106,17 @@ public class ThumbnailUI : MonoBehaviour
         {
             string fileToLoad = fileNames[0];
             fileToLoad = Utils.FixFilePath(fileToLoad);
+
+            GltfAsset asset = new GltfAsset();
             
-            ThumbnailGenerator generator = FindObjectOfType<ThumbnailGenerator>();
-            (GameObject, GltfAsset) gltfTuple = generator.CreateSetupPrefab();
-            if (await gltfTuple.Item2.Load(fileToLoad))
+            if (await asset.Load(fileToLoad))
             {
-                RenderTexture thumbnail = generator.GenerateThumbnail(gltfTuple.Item1.transform);
-                _fileNameLabel.text = Path.GetFileNameWithoutExtension(fileToLoad);
-                _thumbnailImage.image = thumbnail;
+                ThumbnailGenerator generator = FindObjectOfType<ThumbnailGenerator>();
+                RenderTexture thumbnail = null;
+                GameObject ob = new GameObject();
+                generator.GenerateThumbnail(ob.transform, thumbnail);
+                Destroy(ob);
             }
-            Destroy(gltfTuple.Item1);
         }
     }
 
