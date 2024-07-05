@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AutoDestroyThumbnailModel : MonoBehaviour
 {
-    GameObject _someModelObject = null;
+    private bool _isThumbnailModel = false;
 
     void OnEnable()
     {
@@ -18,14 +18,15 @@ public class AutoDestroyThumbnailModel : MonoBehaviour
 
     private void OnModelLoaded(string _, GameObject modelObj, Model.Type __)
     {
-        _someModelObject = modelObj;
+        if (_isThumbnailModel)
+        {
+            Destroy(modelObj);
+            _isThumbnailModel = false;
+        }
     }
 
     private void OnThumbnailLoaded(Texture _)
     {
-        if (_someModelObject != null)
-        {
-            Destroy(_someModelObject);
-        }
+        _isThumbnailModel = true;
     }
 }
