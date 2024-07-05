@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/UI%20Toolkit/Stylesheets/Stylesheet.uss?fileID=7433441132597879392&amp;guid=144c84e6de5467d40838866154e63358&amp;type=3#Stylesheet" />
     <ui:GroupBox name="Content" class="content-view">
         <ui:GroupBox name="OpenFileView" style="max-width: none; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: upper-left;">
-            <ui:Label tabindex="-1" text="Import GLTF/GLB file" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" class="open-file-view__title" />
+            <ui:Label tabindex="-1" text="Import 3D model" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" class="open-file-view__title" />
             <ui:Button text="Select File" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SelectFileButton" class="button" />
         </ui:GroupBox>
         <ui:GroupBox name="ModelLoadedView" style="max-width: none; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: upper-left;">
