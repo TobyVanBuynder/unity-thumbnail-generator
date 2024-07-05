@@ -51,7 +51,7 @@ public class ThumbnailFromModel : MonoBehaviour
 
     private void FixLoadedGltfTransform(GameObject modelObject)
     {
-        Transform modelTransform = modelObject.transform.GetChild(0);
+        Transform modelTransform = modelObject.transform;
         modelTransform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         modelTransform.localScale = Vector3.one;
     }
