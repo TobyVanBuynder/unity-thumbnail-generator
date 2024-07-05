@@ -1,0 +1,17 @@
+{
+    "name": "StandaloneFileBrowser",
+    "rootNamespace": "SFB",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "Ookii.Dialogs.dll",
+        "System.Windows.Forms.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
