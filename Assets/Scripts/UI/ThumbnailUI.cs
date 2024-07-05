@@ -43,12 +43,12 @@ public class ThumbnailUI : MonoBehaviour
 
     private void OnClickSelectFile()
     {
-        GlobalEvents.OnSelectFile?.Invoke(Application.persistentDataPath);
+        GlobalEvents.OnSelectFile?.Invoke(Application.streamingAssetsPath);
     }
 
     private void OnClickExport()
     {
-        GlobalEvents.OnExportFile?.Invoke(Application.persistentDataPath, _thumbnailImage.image, (Thumbnail.ExportMode)_exportFileTypeEnum.value);
+        GlobalEvents.OnExportFile?.Invoke(Application.streamingAssetsPath, _thumbnailImage.image, (Thumbnail.ExportMode)_exportFileTypeEnum.value);
     }
 
     void Start()
