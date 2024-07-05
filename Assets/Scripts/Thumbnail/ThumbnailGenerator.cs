@@ -51,11 +51,6 @@ public class ThumbnailGenerator : MonoBehaviour
     {
         Enable();
 
-        // TODO: move this to GLTF / GLB model loading
-        /*var root = objectTransform.GetChild(0);
-        root.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-        root.localScale = Vector3.one;*/
-
         Transform oldParent = objectTransform.parent;
         Vector3 oldForward = objectTransform.forward;
 

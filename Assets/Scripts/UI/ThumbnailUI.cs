@@ -1,10 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using SFB;
 using System.IO;
-using GLTFast;
-using UnityEngine.Rendering;
-using System;
 
 public class ThumbnailUI : MonoBehaviour
 {
@@ -31,7 +27,7 @@ public class ThumbnailUI : MonoBehaviour
         _openFileView = root.Q<VisualElement>("OpenFileView");
         _modelLoadedView = root.Q<VisualElement>("ModelLoadedView");
 
-        _selectFileButton = root.Q<Button>("OpenFileButton");
+        _selectFileButton = root.Q<Button>("SelectFileButton");
         
         _thumbnailImage = root.Q<Image>("Thumbnail");
         _fileNameLabel = root.Q<Label>("FileName");
@@ -52,11 +48,7 @@ public class ThumbnailUI : MonoBehaviour
 
     private void OnClickExport()
     {
-        // TODO: move to event call
-        ExtensionFilter[] fileTypes = new []{
-            FileSystem.CreateFileType("Image (PNG)", "png")
-        };
-        FileSystem.SavePanelAsync("Export model file", "", fileTypes, Application.persistentDataPath, OnSaveFilePanelAsync);
+        GlobalEvents.OnExportFile?.Invoke(Application.persistentDataPath, _thumbnailImage.image, (Thumbnail.ExportMode)_exportFileTypeEnum.value);
     }
 
     void Start()
@@ -92,46 +84,13 @@ public class ThumbnailUI : MonoBehaviour
 
     private void OnModelLoaded(string filePath, GameObject _, Model.Type modelType)
     {
+        SetModelLoadedView(true);
+
         _fileNameLabel.text = Path.GetFileName(filePath);
     }
 
     private void OnThumbnailLoaded(Texture thumbnail)
     {
         _thumbnailImage.image = thumbnail;
-    }
-
-    private async void OnOpenFilePanelAsync(string[] fileNames)
-    {
-        if (fileNames.Length > 0)
-        {
-            string fileToLoad = fileNames[0];
-            fileToLoad = Utils.FixFilePath(fileToLoad);
-
-            GltfAsset asset = new GltfAsset();
-            
-            if (await asset.Load(fileToLoad))
-            {
-                ThumbnailGenerator generator = FindObjectOfType<ThumbnailGenerator>();
-                RenderTexture thumbnail = null;
-                GameObject ob = new GameObject();
-                generator.GenerateThumbnail(ob.transform, thumbnail);
-                Destroy(ob);
-            }
-        }
-    }
-
-    private async void OnSaveFilePanelAsync(string filePath)
-    {
-        if (filePath != null && filePath.Length > 0)
-        {
-            // Save thumbnail
-            Texture thumbnail = _thumbnailImage.image;
-            Texture2D tex2D = new Texture2D(thumbnail.width, thumbnail.height, TextureFormat.ARGB32, 1, true);
-            AsyncGPUReadback.Request(thumbnail, 0, TextureFormat.ARGB32, (asyncAction) => {
-
-                tex2D.LoadRawTextureData(asyncAction.GetData<byte>());
-                tex2D.EncodeToPNG();
-            });
-        }
     }
 }
