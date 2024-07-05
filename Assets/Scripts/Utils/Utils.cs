@@ -50,4 +50,9 @@ public static class Utils
     {
         return filePath.Replace("\\", "\\\\");;
     }
+
+    public static string GetExtensionWithoutDot(string filePath)
+    {
+        return filePath.Substring(filePath.LastIndexOf('.') + 1);
+    }
 }

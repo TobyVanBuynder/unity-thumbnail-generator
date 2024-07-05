@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.IO;
 using SFB;
 
 using ModelTypeDictionary = System.Collections.Generic.Dictionary<string, Model.Type>;
@@ -25,15 +24,15 @@ public class ModelLoaderSystem : MonoBehaviour
 
     private void RegisterValidTypes()
     {
-        FileSystem.FileTypeBuilder fileTypeBuilder = new FileSystem.FileTypeBuilder();
+        FileSystem.FileTypeBuilder fileTypeBuilder = new FileSystem.FileTypeBuilder("3D model file");
 
-        AddValidType(Model.Type.GLTF, new GltfModelLoader(), fileTypeBuilder, "GLTF scene", "gltf");
-        AddValidType(Model.Type.GLB, new GlbModelLoader(), fileTypeBuilder, "GLTF binary", "glb");
+        AddValidType(Model.Type.GLTF, new GltfModelLoader(), fileTypeBuilder, "gltf");
+        AddValidType(Model.Type.GLB, new GlbModelLoader(), fileTypeBuilder, "glb");
 
         _validFileTypes = fileTypeBuilder.Build();
     }
 
-    private void AddValidType(Model.Type type, IModelLoader modelLoader, FileSystem.FileTypeBuilder builder, string fileTypeName, params string[] fileTypes)
+    private void AddValidType(Model.Type type, IModelLoader modelLoader, FileSystem.FileTypeBuilder builder, params string[] fileTypes)
     {
         foreach (string fileType in fileTypes)
         {
@@ -42,7 +41,7 @@ public class ModelLoaderSystem : MonoBehaviour
 
         _modelLoaderDictionary.Add(type, modelLoader);
 
-        builder.Add(fileTypeName, fileTypes);
+        builder.Add(fileTypes);
     }
 
     void OnEnable()
@@ -62,7 +61,7 @@ public class ModelLoaderSystem : MonoBehaviour
 
     private void OnOpenFile(string[] filePaths)
     {
-        if (filePaths.Length > 0)
+        if (filePaths != null && filePaths.Length > 0)
         {
             string filePath = Utils.FixFilePath(filePaths[0]);
             TryLoadModelFromFile(filePath);
@@ -71,7 +70,7 @@ public class ModelLoaderSystem : MonoBehaviour
 
     private async void TryLoadModelFromFile(string filePath)
     {
-        string extension = Path.GetExtension(filePath);
+        string extension = Utils.GetExtensionWithoutDot(filePath);
 
         if (IsExtensionValid(extension))
         {
@@ -82,6 +81,10 @@ public class ModelLoaderSystem : MonoBehaviour
 
             GlobalEvents.OnModelLoaded?.Invoke(filePath, loadedModelObject, modelType);
         }
+        else 
+        {
+            Debug.LogWarning($"Extension {extension} is invalid!");
+        }
     }
 
     private bool IsExtensionValid(string extension)
@@ -91,7 +94,15 @@ public class ModelLoaderSystem : MonoBehaviour
 
     private IModelLoader GetModelLoader(Model.Type type)
     {
-        return IsModelTypeValid(type) ? _modelLoaderDictionary[type] : null;
+        if (IsModelTypeValid(type))
+        {
+            return _modelLoaderDictionary[type];
+        }
+        else
+        {
+            Debug.LogWarning($"Model Type {type} is invalid!");
+            return null;
+        };
     }
 
     private bool IsModelTypeValid(Model.Type type)

@@ -9,6 +9,7 @@ public class ThumbnailExportSystem : MonoBehaviour
     ExporterDictionary _exporterDictionary;
 
     Texture _textureToSave = null;
+    Thumbnail.ExportMode _exportMode;
 
     void Awake()
     {
@@ -48,22 +49,30 @@ public class ThumbnailExportSystem : MonoBehaviour
         if (IsExportModeValid(exportMode))
         {
             _textureToSave = texture;
-            FileSystem.SavePanelAsync("Save thumbnail image", "Thumbnail", _fileTypeDictionary[exportMode], path, OnSaveThumbnail);
+            _exportMode = exportMode;
+
+            FileSystem.SavePanelAsync("Save thumbnail image", $"Thumbnail.{exportMode.ToString().ToLower()}", _fileTypeDictionary[exportMode], path, OnSaveThumbnail);
+        }
+        else
+        {
+            Debug.LogWarning($"ExportMode {exportMode} is invalid!");
         }
     }
 
     private void OnSaveThumbnail(string filePath)
     {
-        filePath = Utils.FixFilePath(filePath);
+        if (filePath != null && filePath.Length > 0)
+        {
+            filePath = Utils.FixFilePath(filePath);
+
+            IThumbnailExporter exporter = GetThumbnailExporter(_exportMode);
+            exporter.Export(filePath, _textureToSave);
+        }
     }
 
     private IThumbnailExporter GetThumbnailExporter(Thumbnail.ExportMode exportMode)
-    {
-        return IsExportModeValid(exportMode) ? _exporterDictionary[exportMode] : null;
-    }
+        => IsExportModeValid(exportMode) ? _exporterDictionary[exportMode] : null;
 
     private bool IsExportModeValid(Thumbnail.ExportMode exportMode)
-    {
-        return _exporterDictionary.ContainsKey(exportMode);
-    }
+        => _exporterDictionary.ContainsKey(exportMode);
 }
