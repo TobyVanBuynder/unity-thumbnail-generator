@@ -1,33 +1,24 @@
 using UnityEngine;
-using GLTFast;
-using System;
 
 public class ThumbnailGenerator : MonoBehaviour
 {
-    static int _DefaultRTSize = 256;
+    private readonly int _defaultRTSize = 256;
+    private readonly RenderTextureFormat _rtFormat = RenderTextureFormat.ARGB32;
+    private readonly Vector3 _thumbnailObjectForward = -Vector3.forward;
 
-    [SerializeField] Camera _camera;
-    [SerializeField] Light _directionalLight;
-    [SerializeField] Transform _holder;
+    [SerializeField] private Camera _camera;
+    [SerializeField] private Light _directionalLight;
+    [SerializeField] private Transform _holder;
 
-    Vector3 _thumbnailObjectForward = -Vector3.forward;
-    Vector3[] _boundsVertices = null;
-    int _thumbnailLayerMask;
+    private Vector3[] _boundsVertices = null;
+    private int _thumbnailLayerMask = -1;
 
     void Awake()
     {
         _thumbnailLayerMask = LayerMask.NameToLayer("Thumbnail");
 
-        SetLayerMask();
+        SetLayerMask(GetThumbnailLayer(), transform, true);
         Disable();
-    }
-
-    private void SetLayerMask()
-    {
-        gameObject.layer = GetThumbnailLayer();
-        _camera.gameObject.layer = GetThumbnailLayer();
-        _directionalLight.gameObject.layer = GetThumbnailLayer();
-        _holder.gameObject.layer = GetThumbnailLayer();
     }
 
     private void Enable()
@@ -47,25 +38,48 @@ public class ThumbnailGenerator : MonoBehaviour
         return _thumbnailLayerMask;
     }
 
+    private void SetLayerMask(LayerMask layerMask, Transform objectTransform, bool includeChildren = false)
+    {
+        objectTransform.gameObject.layer = layerMask;
+
+        if (includeChildren)
+        {
+            for (int c = 0; c < objectTransform.childCount; c++)
+            {
+                SetLayerMask(layerMask, objectTransform.GetChild(c), includeChildren);
+            }
+        }
+    }
+
     public void GenerateThumbnail(Transform objectTransform, RenderTexture renderTexture = null)
     {
-        Enable();
-
         Transform oldParent = objectTransform.parent;
         Vector3 oldForward = objectTransform.forward;
+        LayerMask oldLayerMask = objectTransform.gameObject.layer;
 
-        objectTransform.SetParent(_holder, false);
-        objectTransform.forward = _thumbnailObjectForward;
+        Enable();
 
+        PrepareObjectForGeneration(objectTransform);
         SetupCamera();
-        Utils.FitObjectInOrthographic(objectTransform, _camera, ref _boundsVertices);
-
-        Generate(renderTexture);
-
-        objectTransform.forward = oldForward;
-        objectTransform.SetParent(oldParent, false);
+        FitObjectInCamera(objectTransform);
+        GenerateTexture(renderTexture);
+        RestoreObjectAfterGeneration(objectTransform, oldParent, oldForward, oldLayerMask);
 
         Disable();
+    }
+
+    private void PrepareObjectForGeneration(Transform objectTransform)
+    {
+        objectTransform.SetParent(_holder, false);
+        objectTransform.forward = _thumbnailObjectForward;
+        SetLayerMask(GetThumbnailLayer(), objectTransform, true);
+    }
+
+    private void RestoreObjectAfterGeneration(Transform objectTransform, Transform oldParent, Vector3 oldForward, LayerMask oldLayerMask)
+    {
+        objectTransform.forward = oldForward;
+        objectTransform.SetParent(oldParent, false);
+        SetLayerMask(oldLayerMask, objectTransform, true);
     }
 
     private void SetupCamera()
@@ -75,13 +89,19 @@ public class ThumbnailGenerator : MonoBehaviour
         _camera.orthographicSize = 1;
     }
 
-    private void Generate(RenderTexture renderTexture)
+    private void FitObjectInCamera(Transform objectTransform)
+    {
+        Utils.FitObjectInOrthographic(objectTransform, _camera, ref _boundsVertices);
+    }
+
+    private void GenerateTexture(RenderTexture renderTexture)
     {
         if (renderTexture == null)
         {
             renderTexture = GenerateDefaultRT();
         }
-        else if (!renderTexture.IsCreated())
+
+        if (!renderTexture.IsCreated())
         {
             CreateRT(renderTexture);
         }
@@ -95,10 +115,8 @@ public class ThumbnailGenerator : MonoBehaviour
 
     private RenderTexture GenerateDefaultRT()
     {
-        RenderTextureDescriptor desc = new RenderTextureDescriptor(_DefaultRTSize, _DefaultRTSize, RenderTextureFormat.ARGB32, 0);
-        RenderTexture renderTexture = new RenderTexture(desc);
-        CreateRT(renderTexture);
-        return renderTexture;
+        RenderTextureDescriptor desc = new RenderTextureDescriptor(_defaultRTSize, _defaultRTSize, _rtFormat);
+        return new RenderTexture(desc);
     }
 
     private void CreateRT(RenderTexture renderTexture)

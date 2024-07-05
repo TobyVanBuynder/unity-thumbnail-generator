@@ -56,7 +56,10 @@ public class ThumbnailFromModel : MonoBehaviour
 
     private void CreateRenderTexture()
     {
-        RenderTextureDescriptor desc = new RenderTextureDescriptor(256, 256, RenderTextureFormat.ARGB32, 0);
+        RenderTextureDescriptor desc = new RenderTextureDescriptor(256, 256, RenderTextureFormat.ARGB32)
+        {
+            sRGB = true
+        };
         _thumbnail = new RenderTexture(desc);
         _thumbnail.Create();
         _thumbnail.filterMode = FilterMode.Point;
