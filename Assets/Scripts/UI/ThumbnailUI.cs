@@ -12,7 +12,10 @@ public class ThumbnailUI : MonoBehaviour
     Button _selectFileButton;
 
     Image _thumbnailImage;
+    Button _rotateLeftButton;
+    Button _rotateRightButton;
     Label _fileNameLabel;
+
     EnumField _exportFileTypeEnum;
     Button _exportButton;
     Button _chooseNewFileButton;
@@ -31,7 +34,10 @@ public class ThumbnailUI : MonoBehaviour
         _selectFileButton = root.Q<Button>("SelectFileButton");
         
         _thumbnailImage = root.Q<Image>("Thumbnail");
+        _rotateLeftButton = root.Q<Button>("RotateLeftButton");
+        _rotateRightButton = root.Q<Button>("RotateRightButton");
         _fileNameLabel = root.Q<Label>("FileName");
+
         _exportFileTypeEnum = root.Q<EnumField>("ExportFileType");
         _exportButton = root.Q<Button>("ExportButton");
         _chooseNewFileButton = root.Q<Button>("ChooseNewFileButton");
@@ -40,6 +46,10 @@ public class ThumbnailUI : MonoBehaviour
     private void HookButtons()
     {
         _selectFileButton.clicked += OnClickSelectFile;
+
+        _rotateLeftButton.clicked += OnClickRotateLeft;
+        _rotateRightButton.clicked += OnClickRotateRight;
+
         _exportButton.clicked += OnClickExport;
         _chooseNewFileButton.clicked += OnClickChooseNewFile;
     }
@@ -47,6 +57,16 @@ public class ThumbnailUI : MonoBehaviour
     private void OnClickSelectFile()
     {
         GlobalEvents.OnSelectFile?.Invoke(Application.streamingAssetsPath);
+    }
+
+    private void OnClickRotateLeft()
+    {
+        GlobalEvents.OnThumbnailRotateLeft?.Invoke();
+    }
+
+    private void OnClickRotateRight()
+    {
+        GlobalEvents.OnThumbnailRotateRight?.Invoke();
     }
 
     private void OnClickExport()

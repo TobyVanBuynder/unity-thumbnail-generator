@@ -142,3 +142,32 @@
     max-height: 32px;
     align-items: center;
 }
+
+.rotate-left-button {
+    background-image: url("project://database/Assets/ThirdParty/Kenney_UIAdventurePack/PNG/arrowSilver_left.png?fileID=2800000&guid=cf8afccb77d55f043bf333e7e4305973&type=3#arrowSilver_left");
+    left: -16px;
+    top: 50%;
+}
+
+.rotate-right-button {
+    background-image: url("project://database/Assets/ThirdParty/Kenney_UIAdventurePack/PNG/arrowSilver_right.png?fileID=2800000&guid=8fdf64d5e32a4844a9eed3a0bc0ee5f0&type=3#arrowSilver_right");
+    right: -16px;
+    top: 50%;
+}
+
+.rotate-button {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    align-self: auto;
+    justify-content: flex-start;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0);
+}

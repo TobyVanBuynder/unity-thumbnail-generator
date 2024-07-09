@@ -8,6 +8,8 @@
         <ui:GroupBox name="ModelLoadedView" style="max-width: none; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: upper-left;">
             <ui:VisualElement name="ThumbnailHolder" style="flex-grow: 0; width: 256px; height: 256px; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px;">
                 <ui:Image name="Thumbnail" style="width: 100%; height: 100%;" />
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="RotateLeftButton" class="rotate-left-button rotate-button" />
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="RotateRightButton" class="rotate-right-button rotate-button" />
             </ui:VisualElement>
             <ui:Label tabindex="-1" text="FILENAME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FileName" class="model-loaded-view__label" />
             <ui:EnumField label="Export as" type="Thumbnail.ExportMode, Assembly-CSharp" name="ExportFileType" class="model-loaded-view__enum" style="align-self: auto; align-items: center;" />
