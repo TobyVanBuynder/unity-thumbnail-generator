@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/Stylesheets/Stylesheet.uss?fileID=7433441132597879392&amp;guid=144c84e6de5467d40838866154e63358&amp;type=3#Stylesheet" />
+    <Style src="project://database/Assets/UI%20Toolkit/Stylesheets/ExitUIStyle.uss?fileID=7433441132597879392&amp;guid=c3bb4d421a73303478ba6a3e667268b8&amp;type=3#ExitUIStyle" />
     <ui:VisualElement name="ButtonHolder" class="exit-button-holder" style="flex-grow: 1; align-self: flex-end; top: 0; right: 0; margin-right: 10px; margin-top: 10px;">
-        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="ExitButton" class="button exit-button" style="align-self: auto; justify-content: center; align-items: center; transform-origin: center; right: 0; top: 0; position: absolute;">
+        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="ExitButton" class="exit-button" style="align-self: auto; justify-content: center; align-items: center; transform-origin: center; right: 0; top: 0; position: absolute;">
             <ui:Image tabindex="0" name="ExitIcon" class="exit-icon exit-icon2" style="flex-shrink: 0;" />
         </ui:Button>
     </ui:VisualElement>

@@ -1,18 +1,20 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/Stylesheets/Stylesheet.uss?fileID=7433441132597879392&amp;guid=144c84e6de5467d40838866154e63358&amp;type=3#Stylesheet" />
-    <ui:GroupBox name="Content" class="content-view">
-        <ui:GroupBox name="OpenFileView" style="max-width: none; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: upper-left;">
+    <Style src="project://database/Assets/UI%20Toolkit/Stylesheets/ThumbnailUIStyle.uss?fileID=7433441132597879392&amp;guid=ced9da2a4f3669148bec4f9c5bde880a&amp;type=3#ThumbnailUIStyle" />
+    <ui:VisualElement name="Content" class="content-view">
+        <ui:VisualElement name="OpenFileView" style="max-width: none; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: upper-left;">
             <ui:Label tabindex="-1" text="Import 3D model" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" class="open-file-view__title" />
             <ui:Button text="Select File" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SelectFileButton" class="button" />
-        </ui:GroupBox>
-        <ui:GroupBox name="ModelLoadedView" style="max-width: none; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: upper-left;">
+        </ui:VisualElement>
+        <ui:VisualElement name="ModelLoadedView" style="max-width: none; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-align: upper-left;">
+            <ui:Button text="Choose New File" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ChooseNewFileButton" class="button" />
             <ui:VisualElement name="ThumbnailHolder" style="flex-grow: 0; width: 256px; height: 256px; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px;">
                 <ui:Image name="Thumbnail" style="width: 100%; height: 100%;" />
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="RotateLeftButton" class="rotate-left-button rotate-button" />
+                <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="RotateRightButton" class="rotate-right-button rotate-button" />
             </ui:VisualElement>
             <ui:Label tabindex="-1" text="FILENAME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FileName" class="model-loaded-view__label" />
             <ui:EnumField label="Export as" type="Thumbnail.ExportMode, Assembly-CSharp" name="ExportFileType" class="model-loaded-view__enum" style="align-self: auto; align-items: center;" />
             <ui:Button text="Export" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ExportButton" class="button" />
-            <ui:Button text="Choose New File" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ChooseNewFileButton" class="button" />
-        </ui:GroupBox>
-    </ui:GroupBox>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

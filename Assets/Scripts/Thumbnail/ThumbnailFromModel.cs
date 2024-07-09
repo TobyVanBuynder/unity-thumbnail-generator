@@ -4,44 +4,97 @@ using UnityEngine;
 public class ThumbnailFromModel : MonoBehaviour
 {
     [SerializeField] ThumbnailGeneratorLoader _generatorLoader;
+    [SerializeField] private int _renderTextureSize = 256;
+    [SerializeField] private FilterMode _renderTextureFilterMode = FilterMode.Point;
+    [SerializeField] private float _rotationStep = 15f;
+    [SerializeField] private bool _autoHideModel = true;
 
-    RenderTexture _thumbnail = null;
+    private readonly RenderTextureFormat _renderTextureFormat = RenderTextureFormat.ARGB32;
+    private readonly int _renderTextureDepthBufferBits = 8;
+
+    GameObject _lastLoadedModel;
+    Model.Type _lastLoadedModelType;
+    RenderTexture _lastRenderedThumbnail;
 
     void Awake()
     {
-        if (_generatorLoader == null)
-        {
-            enabled = false;
-        }
+        if (_generatorLoader == null) enabled = false;
     }
 
     void OnEnable()
     {
         GlobalEvents.OnModelLoaded += OnModelLoaded;
+        GlobalEvents.OnThumbnailRotateLeft += OnThumbnailRotateLeft;
+        GlobalEvents.OnThumbnailRotateRight += OnThumbnailRotateRight;
     }
 
     void OnDisable()
     {
         GlobalEvents.OnModelLoaded -= OnModelLoaded;
+        GlobalEvents.OnThumbnailRotateLeft -= OnThumbnailRotateLeft;
+        GlobalEvents.OnThumbnailRotateRight -= OnThumbnailRotateRight;
     }
 
-    private async void OnModelLoaded(string filePath, GameObject modelObject, Model.Type type)
+    private void OnThumbnailRotateLeft()
     {
-        if (IsOfTypeGLTF(type))
+        RotateThumbnail(_rotationStep);
+        RegenerateThumbnail();
+    }
+
+    private void OnThumbnailRotateRight()
+    {
+        RotateThumbnail(-_rotationStep);
+        RegenerateThumbnail();
+    }
+
+    private void RotateThumbnail(float rotationAngle)
+    {
+        ThumbnailGenerator thumbnailGenerator = _generatorLoader.Get();
+        ThumbnailCamera thumbnailCamera = thumbnailGenerator.GetThumbnailCamera();
+        thumbnailCamera.RotateY(rotationAngle);
+        ThumbnailLight thumbnailLight = thumbnailGenerator.GetThumbnailLight();
+        thumbnailLight.RotateY(rotationAngle);
+    }
+
+    private async void RegenerateThumbnail()
+    {
+        if (_lastLoadedModel != null)
         {
-            FixLoadedGltfTransform(modelObject);
+            await RenderThumbnailFromModel(_lastLoadedModel, _lastLoadedModelType);
+        }
+    }
+
+    private async void OnModelLoaded(string _, GameObject modelObject, Model.Type type)
+    {
+        await RenderThumbnailFromModel(modelObject, type);
+    }
+
+    private async Task RenderThumbnailFromModel(GameObject modelObject, Model.Type type)
+    {
+        _lastLoadedModel = modelObject;
+        _lastLoadedModelType = type;
+
+        if (IsOfTypeGLTF(_lastLoadedModelType))
+        {
+            FixLoadedGltfTransform(_lastLoadedModel);
         }
 
-        if (_thumbnail == null)
+        if (_lastRenderedThumbnail == null)
         {
             CreateRenderTexture();
         }
 
-        _generatorLoader.Get().GenerateThumbnail(modelObject.transform, _thumbnail);
+        ThumbnailGenerator thumbnailGenerator = _generatorLoader.Get();
+        thumbnailGenerator.GenerateThumbnail(_lastLoadedModel.transform, _lastRenderedThumbnail);
+
+        if (_autoHideModel)
+        {
+            _lastLoadedModel.SetActive(false);
+        }
 
         await Task.Yield();
 
-        GlobalEvents.OnThumbnailLoaded?.Invoke(_thumbnail);
+        GlobalEvents.OnThumbnailLoaded?.Invoke(_lastRenderedThumbnail);
     }
 
     private bool IsOfTypeGLTF(Model.Type type)
@@ -58,12 +111,12 @@ public class ThumbnailFromModel : MonoBehaviour
 
     private void CreateRenderTexture()
     {
-        RenderTextureDescriptor desc = new RenderTextureDescriptor(256, 256, RenderTextureFormat.ARGB32, 8)
+        RenderTextureDescriptor desc = new RenderTextureDescriptor(_renderTextureSize, _renderTextureSize, _renderTextureFormat, _renderTextureDepthBufferBits)
         {
             sRGB = true
         };
-        _thumbnail = new RenderTexture(desc);
-        _thumbnail.Create();
-        _thumbnail.filterMode = FilterMode.Point;
+        _lastRenderedThumbnail = new RenderTexture(desc);
+        _lastRenderedThumbnail.Create();
+        _lastRenderedThumbnail.filterMode = _renderTextureFilterMode;
     }
 }
