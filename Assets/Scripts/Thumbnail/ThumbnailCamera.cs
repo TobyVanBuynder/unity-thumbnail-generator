@@ -45,4 +45,9 @@ public class ThumbnailCamera : MonoBehaviour
     {
         transform.Rotate(Vector3.up, angle, Space.World);
     }
+
+    public void SetLayerMask(LayerMask layerMask)
+    {
+        _camera.cullingMask = layerMask;
+    }
 }

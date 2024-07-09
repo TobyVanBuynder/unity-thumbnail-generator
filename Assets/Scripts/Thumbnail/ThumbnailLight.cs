@@ -18,4 +18,14 @@ public class ThumbnailLight : MonoBehaviour
     {
         _light.enabled = false;
     }
+
+    public void RotateY(float angle)
+    {
+        transform.Rotate(Vector3.up, angle, Space.World);
+    }
+
+    public void SetLayerMask(LayerMask layerMask)
+    {
+        _light.cullingMask = layerMask;
+    }
 }

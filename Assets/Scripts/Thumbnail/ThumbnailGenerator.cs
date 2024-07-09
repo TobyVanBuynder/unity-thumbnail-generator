@@ -55,22 +55,24 @@ public class ThumbnailGenerator : MonoBehaviour
         {
             Vector3 oldForward = objectTransform.forward;
             LayerMask oldLayerMask = objectTransform.gameObject.layer;
+            bool oldIsActive = objectTransform.gameObject.activeSelf;
 
             Enable();
 
-            SetObjectProperties(objectTransform, _thumbnailObjectForward, GetThumbnailLayer());
+            SetObjectProperties(objectTransform, _thumbnailObjectForward, GetThumbnailLayer(), true);
 
             SetupCamera(objectTransform);
             GenerateTexture(renderTexture);
 
-            SetObjectProperties(objectTransform, oldForward, oldLayerMask);
+            SetObjectProperties(objectTransform, oldForward, oldLayerMask, oldIsActive);
 
             Disable();
         }
     }
 
-    private void SetObjectProperties(Transform objectTransform, Vector3 forward, LayerMask layerMask)
+    private void SetObjectProperties(Transform objectTransform, Vector3 forward, LayerMask layerMask, bool isActive)
     {
+        objectTransform.gameObject.SetActive(isActive);
         objectTransform.forward = forward;
         Utils.SetLayerMask(layerMask, objectTransform, true);
     }

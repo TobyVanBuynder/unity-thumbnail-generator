@@ -7,6 +7,7 @@ public class ThumbnailFromModel : MonoBehaviour
     [SerializeField] private int _renderTextureSize = 256;
     [SerializeField] private FilterMode _renderTextureFilterMode = FilterMode.Point;
     [SerializeField] private float _rotationStep = 15f;
+    [SerializeField] private bool _autoHideModel = true;
 
     private readonly RenderTextureFormat _renderTextureFormat = RenderTextureFormat.ARGB32;
     private readonly int _renderTextureDepthBufferBits = 8;
@@ -36,21 +37,23 @@ public class ThumbnailFromModel : MonoBehaviour
 
     private void OnThumbnailRotateLeft()
     {
-        RotateThumbnailCamera(_rotationStep);
+        RotateThumbnail(_rotationStep);
         RegenerateThumbnail();
     }
 
     private void OnThumbnailRotateRight()
     {
-        RotateThumbnailCamera(-_rotationStep);
+        RotateThumbnail(-_rotationStep);
         RegenerateThumbnail();
     }
 
-    private void RotateThumbnailCamera(float rotationAngle)
+    private void RotateThumbnail(float rotationAngle)
     {
         ThumbnailGenerator thumbnailGenerator = _generatorLoader.Get();
         ThumbnailCamera thumbnailCamera = thumbnailGenerator.GetThumbnailCamera();
         thumbnailCamera.RotateY(rotationAngle);
+        ThumbnailLight thumbnailLight = thumbnailGenerator.GetThumbnailLight();
+        thumbnailLight.RotateY(rotationAngle);
     }
 
     private async void RegenerateThumbnail()
@@ -83,6 +86,11 @@ public class ThumbnailFromModel : MonoBehaviour
 
         ThumbnailGenerator thumbnailGenerator = _generatorLoader.Get();
         thumbnailGenerator.GenerateThumbnail(_lastLoadedModel.transform, _lastRenderedThumbnail);
+
+        if (_autoHideModel)
+        {
+            _lastLoadedModel.SetActive(false);
+        }
 
         await Task.Yield();
 
