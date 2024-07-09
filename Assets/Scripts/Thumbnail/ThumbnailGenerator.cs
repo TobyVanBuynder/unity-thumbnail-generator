@@ -10,7 +10,6 @@ public class ThumbnailGenerator : MonoBehaviour
     [Header("Linked (DO NOT TOUCH)")]
     [SerializeField] private ThumbnailCamera _thumbnailCamera;
     [SerializeField] private ThumbnailLight _thumbnailLight;
-    [SerializeField] private Transform _objectHolderTransform;
 
     private readonly int _defaultRTSize = 256;
     private readonly RenderTextureFormat _defaultRTFormat = RenderTextureFormat.ARGB32;
@@ -21,7 +20,7 @@ public class ThumbnailGenerator : MonoBehaviour
 
     void Awake()
     {
-        if (_thumbnailCamera == null || _thumbnailLight == null || _objectHolderTransform == null)
+        if (_thumbnailCamera == null || _thumbnailLight == null)
         {
             enabled = false;
             return;
@@ -54,33 +53,31 @@ public class ThumbnailGenerator : MonoBehaviour
     {
         if (objectTransform != null)
         {
-            Transform oldParent = objectTransform.parent;
             Vector3 oldForward = objectTransform.forward;
             LayerMask oldLayerMask = objectTransform.gameObject.layer;
 
             Enable();
 
-            SetObjectProperties(objectTransform, _objectHolderTransform, _thumbnailObjectForward, GetThumbnailLayer());
+            SetObjectProperties(objectTransform, _thumbnailObjectForward, GetThumbnailLayer());
 
             SetupCamera(objectTransform);
             GenerateTexture(renderTexture);
 
-            SetObjectProperties(objectTransform, oldParent, oldForward, oldLayerMask);
+            SetObjectProperties(objectTransform, oldForward, oldLayerMask);
 
             Disable();
         }
     }
 
-    private void SetObjectProperties(Transform objectTransform, Transform parent, Vector3 forward, LayerMask layerMask)
+    private void SetObjectProperties(Transform objectTransform, Vector3 forward, LayerMask layerMask)
     {
-        objectTransform.SetParent(parent, false);
         objectTransform.forward = forward;
         Utils.SetLayerMask(layerMask, objectTransform, true);
     }
 
     private void SetupCamera(Transform objectTransform)
     {
-        _thumbnailCamera.Reset();
+        _thumbnailCamera.ResetCamera(objectTransform);
         _thumbnailCamera.FitObjectInCamera(objectTransform);
     }
 

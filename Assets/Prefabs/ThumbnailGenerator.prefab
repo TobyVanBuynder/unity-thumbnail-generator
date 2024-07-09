@@ -32,7 +32,6 @@ Transform:
   m_Children:
   - {fileID: 5522208496953983274}
   - {fileID: 6668344896694563589}
-  - {fileID: 369399924858067460}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5107023094241552383
@@ -51,7 +50,7 @@ MonoBehaviour:
   _textureFilterMode: 0
   _thumbnailCamera: {fileID: 2522631904321096911}
   _thumbnailLight: {fileID: 2230583599802506407}
-  _objectHolderTransform: {fileID: 369399924858067460}
+  _objectHolderTransform: {fileID: 0}
 --- !u!1 &1654258412535452822
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,38 +182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07511b7a896cb13449f20738ce03c5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _light: {fileID: 6473251168769335340}
---- !u!1 &4673557438637774988
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 369399924858067460}
-  m_Layer: 6
-  m_Name: ObjectHolder
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &369399924858067460
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4673557438637774988}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1538948625897450004}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7017377976175434724
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,7 +196,7 @@ GameObject:
   - component: {fileID: 2522631904321096911}
   m_Layer: 6
   m_Name: ThumbnailCamera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -243,7 +210,7 @@ Transform:
   m_GameObject: {fileID: 7017377976175434724}
   serializedVersion: 2
   m_LocalRotation: {x: 0.16042995, y: 0.37686962, z: -0.06645226, w: 0.9098438}
-  m_LocalPosition: {x: -10, y: 5, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -356,4 +323,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58421936c924885488479d2aeb27fbfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 5215336192403174257}
