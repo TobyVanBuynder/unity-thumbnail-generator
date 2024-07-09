@@ -55,4 +55,22 @@ public static class Utils
     {
         return filePath.Substring(filePath.LastIndexOf('.') + 1);
     }
+
+    public static void SetLayerMask(LayerMask layerMask, Transform objectTransform, bool includeChildren = false)
+    {
+        objectTransform.gameObject.layer = layerMask;
+
+        if (includeChildren)
+        {
+            for (int c = 0; c < objectTransform.childCount; c++)
+            {
+                SetLayerMask(layerMask, objectTransform.GetChild(c), includeChildren);
+            }
+        }
+    }
+
+    public static LayerMask GetLayerMaskFromName(string name)
+    {
+        return LayerMask.NameToLayer(name);
+    }
 }

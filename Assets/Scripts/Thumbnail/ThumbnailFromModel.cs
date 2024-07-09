@@ -4,6 +4,11 @@ using UnityEngine;
 public class ThumbnailFromModel : MonoBehaviour
 {
     [SerializeField] ThumbnailGeneratorLoader _generatorLoader;
+    [SerializeField] private int _renderTextureSize = 256;
+    [SerializeField] private FilterMode _renderTextureFilterMode = FilterMode.Point;
+
+    private readonly RenderTextureFormat _renderTextureFormat = RenderTextureFormat.ARGB32;
+    private readonly int _renderTextureDepthBufferBits = 8;
 
     RenderTexture _thumbnail = null;
 
@@ -58,12 +63,12 @@ public class ThumbnailFromModel : MonoBehaviour
 
     private void CreateRenderTexture()
     {
-        RenderTextureDescriptor desc = new RenderTextureDescriptor(256, 256, RenderTextureFormat.ARGB32, 8)
+        RenderTextureDescriptor desc = new RenderTextureDescriptor(_renderTextureSize, _renderTextureSize, _renderTextureFormat, _renderTextureDepthBufferBits)
         {
             sRGB = true
         };
         _thumbnail = new RenderTexture(desc);
         _thumbnail.Create();
-        _thumbnail.filterMode = FilterMode.Point;
+        _thumbnail.filterMode = _renderTextureFilterMode;
     }
 }
