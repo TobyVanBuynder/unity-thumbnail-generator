@@ -26,8 +26,10 @@ public class ModelLoaderSystem : MonoBehaviour
     {
         FileSystem.FileTypeBuilder fileTypeBuilder = new FileSystem.FileTypeBuilder("3D model file");
 
-        AddValidType(Model.Type.GLTF, new GltfModelLoader(), fileTypeBuilder, "gltf");
-        AddValidType(Model.Type.GLB, new GlbModelLoader(), fileTypeBuilder, "glb");
+        GltfModelLoader gltfModelLoader = new GltfModelLoader();
+
+        AddValidType(Model.Type.GLTF, gltfModelLoader, fileTypeBuilder, "gltf");
+        AddValidType(Model.Type.GLB, gltfModelLoader, fileTypeBuilder, "glb");
 
         _validFileTypes = fileTypeBuilder.Build();
     }
