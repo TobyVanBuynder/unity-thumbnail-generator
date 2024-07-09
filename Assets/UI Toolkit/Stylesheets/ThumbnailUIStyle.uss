@@ -46,7 +46,7 @@
 .model-loaded-view__label {
     margin-top: 8px;
     margin-right: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
     margin-left: 8px;
     padding-top: 0;
     padding-right: 0;
@@ -86,61 +86,6 @@
 .model-loaded-view__enum .unity-enum-field__arrow {
     background-image: url("project://database/Assets/ThirdParty/Kenney_UIAdventurePack/PNG/arrowSilver_down.png?fileID=2800000&guid=789534ac7ffcf104bbfb1ed313fb4fb8&type=3#arrowSilver_down");
     -unity-background-image-tint-color: white;
-}
-
-.exit-icon {
-    background-image: url("project://database/Assets/ThirdParty/Kenney_UIAdventurePack/PNG/iconCross_grey.png?fileID=2800000&guid=ae4928363b92fbe46979e20034080397&type=3#iconCross_grey");
-    width: 16px;
-    height: 16px;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    justify-content: space-around;
-    align-items: stretch;
-    align-self: auto;
-    flex-shrink: 0;
-}
-
-.exit-button {
-    flex-grow: 0;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    padding-top: 4px;
-    padding-right: 0;
-    padding-bottom: 8px;
-    padding-left: 0;
-    width: 32px;
-    height: 32px;
-    min-width: auto;
-    flex-shrink: 0;
-    -unity-slice-right: 2;
-    -unity-slice-left: 2;
-    justify-content: center;
-    align-self: auto;
-    align-items: center;
-}
-
-.exit-button-holder {
-    max-width: 32px;
-    max-height: 32px;
-    top: 0;
-    right: 0;
-    margin-top: 10px;
-    margin-right: 10px;
-    position: relative;
-    left: auto;
-    justify-content: center;
-    align-self: flex-end;
-    flex-grow: 1;
-    flex-shrink: 0;
-    width: auto;
-    height: auto;
-    max-width: 32px;
-    max-height: 32px;
-    align-items: center;
 }
 
 .rotate-left-button {
