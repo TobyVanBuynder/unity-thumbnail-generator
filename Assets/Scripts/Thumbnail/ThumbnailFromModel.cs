@@ -35,6 +35,11 @@ public class ThumbnailFromModel : MonoBehaviour
         GlobalEvents.OnThumbnailRotateRight -= OnThumbnailRotateRight;
     }
 
+    void OnDestroy()
+    {
+        _lastRenderedThumbnail.Release();
+    }
+
     private void OnThumbnailRotateLeft()
     {
         RotateThumbnail(_rotationStep);
@@ -56,20 +61,20 @@ public class ThumbnailFromModel : MonoBehaviour
         thumbnailLight.RotateY(rotationAngle);
     }
 
-    private async void RegenerateThumbnail()
+    private void RegenerateThumbnail()
     {
         if (_lastLoadedModel != null)
         {
-            await RenderThumbnailFromModel(_lastLoadedModel, _lastLoadedModelType);
+            RenderThumbnailFromModel(_lastLoadedModel, _lastLoadedModelType);
         }
     }
 
-    private async void OnModelLoaded(string _, GameObject modelObject, Model.Type type)
+    private void OnModelLoaded(string _, GameObject modelObject, Model.Type type)
     {
-        await RenderThumbnailFromModel(modelObject, type);
+        RenderThumbnailFromModel(modelObject, type);
     }
 
-    private async Task RenderThumbnailFromModel(GameObject modelObject, Model.Type type)
+    private void RenderThumbnailFromModel(GameObject modelObject, Model.Type type)
     {
         _lastLoadedModel = modelObject;
         _lastLoadedModelType = type;
@@ -91,8 +96,6 @@ public class ThumbnailFromModel : MonoBehaviour
         {
             _lastLoadedModel.SetActive(false);
         }
-
-        await Task.Yield();
 
         GlobalEvents.OnThumbnailLoaded?.Invoke(_lastRenderedThumbnail);
     }

@@ -2,10 +2,8 @@ using UnityEngine;
 
 public class ThumbnailGenerator : MonoBehaviour
 {
-
     [Header("Adjustable")]
     [SerializeField] private string _thumbnailLayerName = "Thumbnail";
-    [SerializeField] private FilterMode _textureFilterMode = FilterMode.Point;
 
     [Header("Linked (DO NOT TOUCH)")]
     [SerializeField] private ThumbnailCamera _thumbnailCamera;
@@ -14,6 +12,7 @@ public class ThumbnailGenerator : MonoBehaviour
     private readonly int _defaultRTSize = 256;
     private readonly RenderTextureFormat _defaultRTFormat = RenderTextureFormat.ARGB32;
     private readonly int _defaultRTDepthBufferBits = 8;
+    private FilterMode _defaultRTFilterMode = FilterMode.Point;
     private readonly Vector3 _thumbnailObjectForward = -Vector3.forward;
 
     private int _thumbnailLayerMask;
@@ -111,7 +110,7 @@ public class ThumbnailGenerator : MonoBehaviour
     private void CreateRT(RenderTexture renderTexture)
     {
         renderTexture.Create();
-        renderTexture.filterMode = _textureFilterMode;
+        renderTexture.filterMode = _defaultRTFilterMode;
     }
 
     private int GetThumbnailLayer()
