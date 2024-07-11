@@ -35,6 +35,11 @@ public class ThumbnailFromModel : MonoBehaviour
         GlobalEvents.OnThumbnailRotateRight -= OnThumbnailRotateRight;
     }
 
+    void OnDestroy()
+    {
+        _lastRenderedThumbnail.Release();
+    }
+
     private void OnThumbnailRotateLeft()
     {
         RotateThumbnail(_rotationStep);
